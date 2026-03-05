@@ -180,6 +180,210 @@ Prompt engineering, therefore, is both analytical and iterative.
 Adjusting how each component is phrased or ordered can materially influence model output.  
 Understanding these building blocks enables systematic experimentation, more reliable behavior, and ultimately more effective LLM-powered applications.  
 
+---
+
+### Basic Prompting Techniques
+
+Basic prompting techniques form the foundation of interacting effectively with Large Language Models (LLMs).  
+While advanced prompting strategies exist, many practical tasks can already be accomplished by simply giving the model a clear instruction.  
+Understanding how prompts are structured and how parameters such as **temperature** influence response generation is essential for guiding the model toward the desired output.  
+
+At the most fundamental level, prompt engineering involves communicating a task clearly so that the LLM can generate the appropriate response.  
+Because LLMs are trained on massive datasets and have learned patterns across language, they can often perform tasks without needing explicit examples in the prompt.  
+This ability enables a technique known as **zero-shot prompting**, where the model is given a direct instruction and asked to complete the task based solely on its prior training.  
+
+#### Direct Instruction (Zero-Shot Prompting)
+
+The simplest prompting approach is to provide a direct instruction describing the task to be performed.  
+The model interprets the instruction and generates a response accordingly.  
+This technique is widely used for tasks such as summarization, translation, and answering factual questions.  
+
+Common applications include:
+
+- **Text Summarization** – Condensing a long passage into a shorter summary while preserving key ideas.
+- **Question Answering** – Asking general knowledge questions that the model answers using its learned information.
+- **Translation** – Converting text from one language into another.
+
+For example, a prompt such as **“Summarize the following text into two sentences”** clearly defines the task, enabling the model to generate a concise summary.  
+Similarly, a prompt like **“What is the capital of France?”** allows the model to respond with factual knowledge it has learned during training.  
+
+#### Text Generation and Continuation
+
+LLMs are also capable of generating creative or structured content. By providing a starting prompt or theme, the model can produce poems, stories, code, or other forms of text.  
+
+Typical uses include:
+
+- **Creative Writing** – Generating poems, short stories, or descriptive passages.
+- **Story Continuation** – Extending a partially written narrative.
+- **Content Generation** – Producing articles, scripts, or descriptive text based on a topic.
+
+For instance, prompting the model with **“Write a short poem about a rainy day in the city”** encourages creative text generation,  
+while starting a story and asking the model to continue it allows the model to extend the narrative coherently.  
+
+#### Information Extraction
+
+Another common prompting technique involves extracting specific pieces of information from unstructured text.  
+Instead of generating new content, the model identifies and returns particular details requested in the prompt.  
+
+Examples of extracted information may include:
+
+- Names of people or organizations
+- Dates or locations
+- Key entities or attributes within a sentence or paragraph
+
+A prompt such as **“Extract the name of the person and the company mentioned in the following sentence”** directs the model to identify structured data from the given text.  
+
+#### Simple Classification
+
+LLMs can also categorize text according to predefined labels.  
+This technique is useful for tasks such as sentiment analysis or topic classification.  
+
+Examples of classification tasks include:
+
+- **Sentiment Analysis** – Determining whether a review is positive, negative, or neutral.
+- **Topic Classification** – Assigning a category to an article or message.
+- **Content Labeling** – Identifying the type or intent of a piece of text.
+
+For example, a prompt may ask the model to classify a customer review into **Positive**, **Negative**, or **Neutral** sentiment based on the tone of the message.
+
+#### Role of Prompt Clarity and Generation Parameters
+
+Although these prompting techniques are relatively simple, the quality of the results depends greatly on the clarity of the instruction and the generation parameters used.  
+Parameters such as **temperature** influence how deterministic or creative the model's output will be.  
+
+- **Lower temperature values** tend to produce more precise and predictable responses, making them suitable for tasks like summarization, extraction, or factual answering.
+- **Higher temperature values** introduce more randomness, which can be beneficial for creative tasks such as storytelling or poetry generation.
+
+These basic prompting methods illustrate the core principle of prompt engineering: carefully structuring input to guide the model's behavior.  
+While simple, they are powerful enough to support many real-world applications.  
+More advanced prompting strategies build upon these fundamentals to achieve greater control, reliability, and sophistication in LLM-powered systems.
+
+---
+
+### Understanding LLM Temperature and Other Parameters
+
+Large Language Models (LLMs) generate text by predicting the next token (a word or part of a word) based on probability distributions learned during training.  
+When a prompt is provided, the model calculates the probability of many possible next tokens and then selects one of them.  
+
+**Generation parameters** act as control mechanisms that influence how the model makes this selection.  
+By adjusting these parameters, developers can control aspects such as `randomness`, `creativity`, and `response length`, allowing the model to behave `more predictably` or `more creatively` depending on the task.
+
+In practical applications, these parameters function like tuning knobs for the generation process.  
+Tasks such as factual question answering or code generation typically require precise and deterministic outputs,  
+whereas creative writing or brainstorming may benefit from more diverse and exploratory responses.  
+Understanding how these parameters influence token selection helps developers obtain consistent and task-appropriate results from LLMs.  
+
+#### Temperature
+
+**Temperature** controls the randomness of the model's output. It adjusts how strongly the model prefers the most probable tokens when generating the next piece of text.
+
+- **Low Temperature (≈ 0.1 – 0.4)**
+  - Produces deterministic and focused outputs
+  - The model consistently selects the most probable tokens
+  - Useful for tasks requiring accuracy and reliability
+
+  Typical use cases:
+
+  - Factual question answering
+  - Code generation
+  - Text summarization
+  - Classification
+
+- **High Temperature (≈ 0.8 – 1.5)**
+
+  - Introduces randomness and diversity in token selection
+  - Allows less probable tokens to be chosen
+  - Produces more creative and varied outputs
+
+  Typical use cases:
+
+  - Brainstorming ideas
+  - Creative writing (stories, poems)
+  - Generating multiple alternative responses
+  - Conversational chatbots
+
+> Conceptually, lower temperatures **sharpen the probability distribution**, making the most likely token dominant,  
+> while higher temperatures **flatten the distribution**, increasing the likelihood of selecting less probable tokens.  
+
+#### Top-p (Nucleus Sampling)
+
+**Top-p**, also known as **nucleus sampling**, limits the set of candidate tokens based on cumulative probability rather than a fixed count.  
+
+Instead of considering all possible tokens, the model selects the **smallest group of tokens whose combined probability exceeds a threshold (p)**.  
+The next token is then sampled only from this subset.  
+
+Example:
+
+- If **top_p = 0.9**, the model selects tokens in descending probability order until their cumulative probability reaches **90%**.
+- Only those tokens are considered for sampling.
+
+Advantages of top-p sampling:
+
+- Avoids selecting extremely low-probability tokens
+- Dynamically adapts to the probability distribution
+- Maintains diversity while preventing unrealistic outputs
+
+Because it adjusts automatically to the distribution shape, many practitioners prefer **top-p over top-k** for balancing creativity and quality.
+
+#### Top-k Sampling
+
+**Top-k** sampling restricts the model to choosing from only the **k most probable tokens**.  
+
+Example:
+
+- If **top_k = 5**, the model identifies the five most likely tokens for the next position.
+- All other tokens are ignored.
+- The next token is sampled only from these five options.
+
+Characteristics of top-k:
+
+- Simple and easy to understand
+- Provides strict control over candidate tokens
+- Can sometimes be too restrictive if good tokens fall outside the top-k set
+
+Because of this limitation, top-p is often preferred since it dynamically adjusts the token pool instead of using a fixed cutoff.
+
+#### Other Important Generation Controls
+
+Although temperature, top-p, and top-k control randomness, additional parameters influence other aspects of generation:
+
+- **Max Tokens (or Max Length)** – Limits the maximum number of tokens the model can generate, preventing overly long responses and helping manage API costs.
+- **Frequency Penalty** – Reduces the likelihood of repeating tokens that have already appeared frequently in the output.
+- **Presence Penalty** – Encourages the introduction of new topics or tokens by penalizing those that have appeared before.
+- **Stop Sequences** – Defines specific strings that terminate generation once produced.
+
+#### Choosing the Right Parameter Settings
+
+There is no universal parameter configuration suitable for every task. The optimal settings depend on the desired behavior of the model.
+
+Typical starting points include:
+
+- **Factual or deterministic tasks**
+
+  - Low temperature (0.1–0.4)
+  - top_p close to 1.0
+
+- **Creative or exploratory tasks**
+
+  - Higher temperature (0.7–1.0)
+  - top_p between 0.8 and 0.95
+
+- **Balanced tasks**
+
+  - Moderate temperature (0.5–0.7)
+
+In practice, developers often refine these values through experimentation.  
+By adjusting parameters incrementally and observing the results, it becomes possible to achieve the desired balance between creativity, precision, and response length.  
+
+Understanding these generation parameters provides deeper control over how an LLM produces text.  
+Combined with well-structured prompts, they form a powerful toolkit for building reliable and effective AI-driven applications.  
+
+---
+
+#### [Chapter 01: Hands On Exercise](./notebooks/chapter-01-hands-on.ipynb)
+
+---
+
 ## Chapter 2: Advanced Prompting Strategies
 
 ## Chapter 3: Prompt Design, Iteration, and Evaluation
