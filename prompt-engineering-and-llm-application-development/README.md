@@ -3,7 +3,19 @@
 ## Table of Content
 
 - [Chapter 1: Foundations of Prompt Engineering](#chapter-1-foundations-of-prompt-engineering)
+  - [Introduction to Large Language Models](#introduction-to-large-language-models)
+  - [What is Prompt Engineering?](#what-is-prompt-engineering)
+  - [Components of a Prompt](#components-of-a-prompt)
+  - [Basic Prompting Techniques](#basic-prompting-techniques)
+  - [Understanding LLM Temperature and Other Parameters](#understanding-llm-temperature-and-other-parameters)
 - [Chapter 2: Advanced Prompting Strategies](#chapter-2-advanced-prompting-strategies)
+  - [Zero-Shot Prompting](#zero-shot-prompting)
+  - [Few-Shot Prompting](#few-shot-prompting)
+  - [Instruction Following Prompts](#instruction-following-prompts)
+  - [Role Prompting](#role-prompting)
+  - [Structuring Output Formats(JSON, Markdown)](#structuring-output-formats)
+  - [Chain-of-Thought Prompting](#chain-of-thought-prompting)
+  - [Self-Consistency Prompting](#self-consistency-prompting)
 - [Chapter 3: Prompt Design, Iteration, and Evaluation](#chapter-3-prompt-design-iteration-and-evaluation)
 - [Chapter 4: Interacting with LLM APIs](#chapter-4-interacting-with-llm-apis)
 - [Chapter 5: Building Applications with LLM Frameworks](#chapter-5-building-applications-with-llm-frameworks)
@@ -385,6 +397,405 @@ Combined with well-structured prompts, they form a powerful toolkit for building
 ---
 
 ## Chapter 2: Advanced Prompting Strategies
+
+### Zero-Shot Prompting
+
+Zero-shot prompting is a fundamental prompting strategy used when working with Large Language Models (LLMs).  
+In this approach, the model is asked to perform a task using only a clear instruction or description, without providing any examples of the task within the prompt.  
+Instead of demonstrating how the task should be performed, the user simply states what needs to be done and relies on the model's extensive training to understand and execute the request.  
+
+This method works effectively because modern LLMs are trained on massive datasets containing diverse forms of text such as books, websites, articles, and code repositories.  
+During training, the models learn patterns associated with common language tasks including summarization, translation, question answering, classification, and information extraction.  
+As a result, when a task description resembles patterns encountered during training, the model can often generalize and complete the task successfully without needing explicit examples.  
+
+#### How Zero-Shot Prompting Works
+
+The effectiveness of zero-shot prompting lies in the model's ability to apply previously learned knowledge to new instructions.  
+When a user provides a prompt describing a task, the model interprets the instruction and generates a response based on patterns learned during training.  
+Instruction-tuned models are especially good at following such prompts because they have been optimized to understand and respond to natural language instructions.  
+
+In practice, a zero-shot prompt typically consists of a clear instruction followed by the input data on which the task should be performed.  
+
+Examples of Zero-Shot Prompting
+
+Zero-shot prompting can be applied to a wide range of tasks. Some common examples include:
+
+##### Sentiment Classification
+
+A model can be asked to determine the sentiment of a piece of text without seeing any example classifications.
+
+```text
+Classify the sentiment of the following customer review as positive, negative, or neutral.
+
+Review: "The setup process was incredibly confusing, but the support team was very helpful."
+
+Sentiment:
+```
+
+##### Text Summarization
+
+The model can summarize a long piece of content based solely on the instruction.
+
+```text
+Summarize the main points of the following article in three bullet points.
+```
+
+##### Extracting Information
+
+Specific entities can be extracted from text, often with a requested output format.
+
+```text
+Extract the name of the person and the company from the following sentence and return the result as JSON.
+```
+
+##### Language Translation
+
+Translation tasks are particularly well-suited for zero-shot prompting.
+
+```text
+Translate the following English text to French:
+
+"Hello, how are you?"
+```
+
+#### Advantages of Zero-Shot Prompting
+
+Zero-shot prompting offers several practical benefits:
+
+- **Simplicity** – It is the most straightforward prompting approach since it only requires a clear instruction.
+- **No Example Data Required** – There is no need to collect or prepare example inputs and outputs.
+- **Quick Baseline Evaluation** – It allows developers to quickly test whether an LLM can perform a task effectively without additional prompt engineering.
+
+#### Limitations and Challenges
+
+Despite its usefulness, zero-shot prompting may not always produce optimal results. Some common challenges include:
+
+- **Performance Limitations** – For highly specialized or complex tasks, the model may perform better when examples are provided.
+- **Dependence on Instruction Clarity** – Ambiguous or poorly written prompts can lead to inconsistent or incorrect responses.
+- **Model Capability Differences** – Some models handle zero-shot tasks better than others, particularly larger or instruction-tuned models.
+
+#### When to Use Zero-Shot Prompting
+
+Zero-shot prompting is usually the best starting point when developing applications that involve LLMs.  
+For common NLP tasks such as classification, translation, summarization, or information extraction, a well-written zero-shot prompt may be sufficient to achieve good results.  
+
+If the model's performance is not satisfactory,  
+the zero-shot prompt can serve as a baseline before moving to more advanced techniques such as few-shot prompting, where examples are included to guide the model's behavior.  
+
+Understanding how to design effective zero-shot prompts is an essential skill in prompt engineering, as it leverages the inherent capabilities of modern language models with minimal effort.
+
+---
+
+### Few-Shot Prompting
+
+Few-shot prompting is an advanced prompt engineering technique used to guide Large Language Models (LLMs) by providing a small number of examples directly within the prompt.  
+Unlike zero-shot prompting, where the model receives only an instruction, few-shot prompting demonstrates how the task should be performed by including example input–output pairs.  
+The model analyzes these examples and learns the pattern during the current interaction, enabling it to apply the same pattern to new input.  
+
+This technique relies on a mechanism called **in-context learning**, where the model infers the relationship between inputs and outputs from examples provided in the prompt.  
+Importantly, the model's internal parameters are not modified.  
+The learning happens temporarily within the context of the prompt, allowing the model to adapt its behavior dynamically for the given task.  
+
+Few-shot prompting is particularly useful when:
+
+- The task is **novel or domain-specific** and cannot be easily described with a simple instruction.
+- The output must follow a **specific format**.
+- You want the model to adopt a **particular style, tone, or reasoning pattern**.
+- The results from zero-shot prompting are not sufficiently accurate or consistent.
+
+#### How Few-Shot Prompting Works
+
+When examples are provided, the model identifies the pattern connecting each input with its corresponding output.  
+It then applies that same pattern to the final query. The examples act as demonstrations rather than training data.  
+
+You can think of this process as giving a colleague quick instructions with examples right before they perform a task.  
+The colleague observes the examples, understands the pattern, and applies it to the new problem.  
+
+#### Structure of a Few-Shot Prompt
+
+A typical few-shot prompt follows a structured format:
+
+1. **Optional Task Description** – Briefly explains the task.
+2. **Example Inputs and Outputs** – Demonstrates how the task should be performed.
+3. **Actual Input** – The query the model must solve.
+4. **Output Indicator** – Signals where the model should generate the answer.
+
+Consistency in formatting and labeling across examples is essential for good results.  
+
+##### Example 1: Sentiment Classification
+
+Few-shot prompting can help guide classification tasks by showing examples of how inputs should be labeled.  
+
+```text
+Classify the sentiment of the following customer reviews.
+
+Text: "The battery life on this device is amazing!"
+Sentiment: Positive
+
+Text: "The screen scratches too easily."
+Sentiment: Negative
+
+Text: "It arrived on time."
+Sentiment: Neutral
+
+Text: "Customer support was helpful but slow to respond."
+Sentiment:
+```
+
+In this prompt, the examples demonstrate:
+
+- The task (sentiment classification)
+- The expected labels (Positive, Negative, Neutral)
+- The formatting of the output
+
+The model then predicts the sentiment for the final review based on the demonstrated pattern.
+
+##### Example 2: Code Generation
+
+Few-shot prompting can also guide code generation tasks.  
+By providing examples of how descriptions translate into functions, the model learns the structure and logic required.  
+
+```python
+# Generate a Python function based on the description.
+
+Description: """Adds two numbers."""
+Function:
+def add(a, b):
+    """Adds two numbers."""
+    return a + b
+
+Description: """Concatenates two strings with a space."""
+Function:
+def concatenate_strings(s1, s2):
+    """Concatenates two strings with a space."""
+    return s1 + " " + s2
+
+Description: """Calculates the area of a rectangle."""
+Function:
+```
+
+The model observes that:
+
+- The description becomes the function's docstring.
+- The function name reflects the description.
+- Appropriate parameters and logic are implemented.
+
+Based on this pattern, the model will likely generate a function that calculates the area of a rectangle.
+
+##### Choosing Effective Examples
+
+The success of few-shot prompting depends heavily on the examples included in the prompt. Some important guidelines include:
+
+- **Relevance** – Examples should closely match the task and the type of input expected.
+- **Consistency** – Use the same structure and labeling for all examples and the final query.
+- **Accuracy** – Incorrect examples will mislead the model.
+- **Variety** – If the task involves different cases (e.g., multiple sentiment categories), include examples representing those cases.
+- **Conciseness** – Examples should be short enough to conserve the context window.
+
+Typically, **one to five examples** are sufficient for effective few-shot prompting.
+
+#### Trade-offs and Limitations
+
+While few-shot prompting provides more control than zero-shot prompting, it also introduces several trade-offs:
+
+- **Context Window Usage** – Including examples increases the number of tokens in the prompt.
+- **Example Sensitivity** – Model performance may depend strongly on the specific examples used or their order.
+- **Higher Cost** – Longer prompts increase API usage costs.
+- **Temporary Learning** – The model does not permanently learn from examples; the guidance only applies within that prompt.
+
+For tasks requiring consistent, large-scale performance, **fine-tuning the model** may be a more appropriate long-term solution.  
+
+Few-shot prompting is a powerful technique that improves LLM performance by demonstrating how a task should be performed through examples.  
+By leveraging **in-context learning**, it allows developers to guide model behavior without modifying the model itself.  
+Compared to zero-shot prompting, few-shot prompting provides greater control over output format, reasoning style, and task execution, making it a valuable tool for building reliable AI-driven applications.  
+
+---
+
+### Instruction Following Prompts
+
+Instruction following prompts are a prompt engineering technique used to guide Large Language Models (LLMs) through **explicit and detailed instructions**.  
+Instead of asking vague questions, this approach provides clear commands that define exactly what the model should do, how it should perform the task, and how the output should be structured.  
+This technique helps achieve more **reliable, consistent, and controlled outputs**, which is particularly important when building real-world applications.  
+
+Unlike few-shot prompting, which relies on examples to demonstrate a pattern, instruction following focuses primarily on **clear directives and constraints**.  
+The goal is to reduce ambiguity so that the model can execute the task precisely according to the provided instructions.  
+
+#### Key Components of Instruction Following Prompts
+
+Effective instruction prompts typically include several elements that clarify the task and the expected output.
+
+##### 1. Clear Action Verb
+
+The prompt should begin with a strong action verb that defines the task. Common verbs include:
+
+- Summarize
+- Translate
+- Extract
+- Generate
+- Rewrite
+- Classify
+- Compare
+- Explain
+
+These verbs clearly signal the type of operation the model must perform.
+
+##### 2. Subject or Input Specification
+
+The prompt must clearly define the **content or input*- the model should process. This might include:
+
+- A block of text
+- An email message
+- A dataset
+- Code or documentation
+
+Providing the input directly in the prompt ensures the model understands what it needs to analyze.
+
+##### 3. Constraints and Requirements
+
+Constraints define **rules or boundaries** for the output. These help narrow the response and make it more predictable.  
+
+Examples include:
+
+- **Length constraints:** “in under 100 words”, “exactly three bullet points”
+- **Content constraints:** “focus on the technical aspects”
+- **Tone constraints:** “write in a formal tone”
+- **Audience constraints:** “explain for a beginner”
+
+##### 4. Output Format Specification
+
+Explicitly defining the structure of the output ensures the result can be easily processed or integrated into applications.  
+
+Examples include:
+
+- JSON objects
+- Markdown tables
+- Bullet lists
+- Comma-separated values
+
+For example, a prompt may ask the model to return information as:
+
+```json
+{
+  "name": "",
+  "summary": ""
+}
+```
+
+##### 5. Negative Constraints (Optional)
+
+Sometimes it is helpful to specify what the model should **avoid doing**. This can prevent unwanted behavior.
+
+Examples include:
+
+- “Do not include personal opinions.”
+- “Avoid overly technical language.”
+- “Do not add an introduction or conclusion.”
+
+#### Examples: Improving Prompt Precision
+
+##### Example 1: Summarization
+
+Vague Prompt
+
+```text
+Summarize this text.
+```
+
+Instruction-following Prompt
+
+```text
+Summarize the following text in exactly two sentences, focusing on the author's main conclusion. Do not include examples from the text.
+```
+
+This version clearly defines both **length** and **content constraints**.
+
+##### Example 2: Information Extraction
+
+Vague Prompt
+
+```text
+Find important information in this email.
+```
+
+Instruction-following Prompt
+
+```text
+Extract the sender's name, meeting date, and meeting time from the email. 
+Return the output as a JSON object with keys:
+"sender_name", "meeting_date", and "meeting_time".
+If any information is missing, return null.
+```
+
+Here the instructions specify **what to extract** and **how to format the output**.
+
+##### Example 3: Code Generation
+
+Vague Prompt
+
+```text
+Write Python code to read a file.
+```
+
+Instruction-following Prompt
+
+```text
+Generate a Python function named read_text_file that takes file_path as input.
+The function should:
+1. Open the file in read mode.
+2. Read the entire content.
+3. Handle FileNotFoundError by returning None.
+4. Return the file content as a string.
+
+Include a docstring explaining the function and its arguments.
+Do not include example usage.
+```
+
+This prompt clearly specifies **function name, parameters, behavior, error handling, and documentation**.
+
+#### Best Practices for Writing Instructions
+
+To design effective instruction-following prompts:
+
+- **Be explicit and unambiguous.** Avoid vague wording.
+- **Use action-oriented language** to clearly define the task.
+- **Structure complex instructions** with numbered steps or bullet points.
+- **Keep instructions simple and readable.**
+- **Iterate and refine prompts** based on the model’s responses.
+
+Prompt engineering often involves experimenting and adjusting instructions until the desired behavior is achieved.
+
+#### When to Use Instruction Following Prompts
+
+Instruction-following prompts are especially useful when:
+
+- The task involves **multiple steps or complex logic**.
+- A **specific output format** is required.
+- The response must follow a **specific tone or style**.
+- The output will be used in **automated pipelines or applications**.
+
+While zero-shot and few-shot prompting can handle many tasks, instruction following provides **greater control and precision**, making it an essential technique for developing reliable LLM-powered systems.
+
+---
+
+### Role Prompting
+
+---
+
+### Structuring Output Formats
+
+---
+
+### Chain-of-Thought Prompting
+
+---
+
+### Self-Consistency Prompting
+
+---
+
+#### [Chapter 02: Hands On Exercise](./notebooks/chapter-02-hands-on.ipynb)
+
+---
 
 ## Chapter 3: Prompt Design, Iteration, and Evaluation
 
