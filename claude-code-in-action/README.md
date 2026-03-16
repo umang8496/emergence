@@ -2,17 +2,18 @@
 
 ## Table of Content
 
-- [What is a Coding Assistant?](#1-what-is-a-coding-assistant)
-- [What is Claude Code?](#2-what-is-claude-code)
-- [What is `CLAUDE.md` and Why Does It Matter?](#3-what-is-claudemd-and-why-does-it-matter)
-- [Tools in Claude Code](#4-tools-in-claude-code)
-- [Adding Context to the Claude Code](#5-adding-context-to-claude-code)
-- [Controlling Context](#6-controlling-context)
-- [Custom Commands](#7-custom-commands)
+- [What is a Coding Assistant?](#01-what-is-a-coding-assistant)
+- [What is Claude Code?](#02-what-is-claude-code)
+- [What is `CLAUDE.md` and Why Does It Matter?](#03-what-is-claudemd-and-why-does-it-matter)
+- [Tools in Claude Code](#04-tools-in-claude-code)
+- [Adding Context to the Claude Code](#05-adding-context-to-claude-code)
+- [Controlling Context](#06-controlling-context)
+- [Custom Commands](#07-custom-commands)
+- [Making Changes](#08-making-changes)
 
 ---
 
-## 1. What is a Coding Assistant?
+## 01. What is a Coding Assistant?
 
 A **coding assistant** is a software tool that uses Artificial Intelligence (AI) to help developers write, debug, refactor, and optimize code more efficiently and accurately.  
 It acts as a **virtual pair programmer** — always available, never tired, and fluent in virtually every programming language.  
@@ -52,7 +53,7 @@ It acts as a **virtual pair programmer** — always available, never tired, and 
 - **Claude Code** — Agentic, terminal-native, multi-file autonomous agent *(covered below)*
 - **Tabnine**, **Amazon Q**, **Gemini Code Assist**
 
-## 2. What is Claude Code?
+## 02. What is Claude Code?
 
 **Claude Code** is Anthropic's **agentic coding tool** that lives in your terminal, understands your entire codebase, and autonomously executes complex development tasks through natural language commands.
 
@@ -100,15 +101,15 @@ Unlike traditional coding assistants that passively suggest code, Claude Code **
 When given a task, Claude Code doesn't make a single API call — it **orchestrates multiple specialized sub-agents**:
 
 ```sh
-Your Request
-     ↓
-Main Agent (Orchestrator)
-     ↓
+        Your Request
+            ↓
+    Main Agent (Orchestrator)
+            ↓
 ┌──────────────────────────────────────┐
 │ Explore   │ Analyze    │ Investigate │
 │ codebase  │ modules    │ dependencies│
 └──────────────────────────────────────┘
-     ↓
+            ↓
 Implements changes → Runs tests → Iterates
 ```
 
@@ -135,7 +136,7 @@ Implements changes → Runs tests → Iterates
 
 ---
 
-## 3. What is `CLAUDE.md` and Why Does It Matter?
+## 03. What is `CLAUDE.md` and Why Does It Matter?
 
 ### The Core Problem It Solves
 
@@ -234,7 +235,7 @@ This complements `CLAUDE.md` — you don't need to manually document everything 
 
 ---
 
-## 4. Tools in Claude Code
+## 04. Tools in Claude Code
 
 ### The Core Problem Tools Solve
 
@@ -253,16 +254,16 @@ When Claude needs to do something it can't do with text alone, it requests a too
 
 ```sh
 User Request
-     ↓
+    ↓
 Claude receives task
-     ↓
+    ↓
 Claude formulates a formatted tool request
 (e.g., "read_file: src/index.ts")
-     ↓
+    ↓
 The assistant/system executes the actual action
-     ↓
+    ↓
 Result is sent back to Claude as text
-     ↓
+    ↓
 Claude uses result to continue reasoning / take next action
 ```
 
@@ -330,7 +331,7 @@ This is useful for embedding Claude's tool-powered intelligence into your own sc
 
 ---
 
-## 5. Adding Context to Claude Code
+## 05. Adding Context to Claude Code
 
 ### Why Context Matters
 
@@ -440,7 +441,7 @@ It doesn't ignore new instructions — it starts partially ignoring everything.
 
 ---
 
-## 6. Controlling Context
+## 06. Controlling Context
 
 Context is precious — too much irrelevant information actively hurts Claude's performance.
 
@@ -463,7 +464,7 @@ Context is precious — too much irrelevant information actively hurts Claude's 
 
 ---
 
-## 7. Custom Commands
+## 07. Custom Commands
 
 ### What Are They?
 
@@ -495,6 +496,50 @@ Check for: SQL injection, XSS, insecure dependencies
 
 - Arguments can be any string — file paths, descriptions, identifiers
 - Great for: dependency auditing, test generation, vulnerability fixing, code reviews
+
+---
+
+## 08. Making Changes
+
+### Screenshot Integration
+
+On `macOS`, paste screenshots directly into Claude Code using **`Control-V`** (not `Command-V` — common gotcha).  
+Use this when you want Claude to see a UI bug, a design reference, or any visual context it needs to act on.  
+
+### The Two Power Modes
+
+| Mode              | Activation          | Best For                                                 |
+|-------------------|---------------------|----------------------------------------------------------|
+| **Plan Mode**     | `Shift + Tab` twice | Breadth — multi-step tasks spanning multiple files       |
+| **Thinking Mode** | Say `"Ultra think"` | Depth — complex logic, hard bugs, architecture decisions |
+
+**How they differ:**
+
+- **Plan Mode** — Claude researches relevant files first, then produces a detailed implementation plan *before* writing any code
+- **Thinking Mode** — Claude gets an extended reasoning budget to think deeply through the problem before responding
+- **Combined** — use both together for tasks that are broad *and* complex. Note that both modes consume extra tokens — factor in the cost.
+
+#### Thinking Modes
+
+```sh
+  Think
+    ↓
+  Think more
+    ↓
+  Think a lot
+    ↓
+  Think longer
+    ↓
+  Ultrathink
+```
+
+### Key Workflow
+
+```sh
+Spot issue → Screenshot (Control-V) → Describe the change
+→ Plan Mode (if broad) / Thinking Mode (if deep)
+→ Review → Accept
+```
 
 ---
 
