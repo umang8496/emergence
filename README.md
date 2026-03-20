@@ -5,8 +5,6 @@
 - [ConsumerLens](./consumerLens/README.md)
 - [Claude Code in Action](./claude-code-in-action/README.md)
 - [Claude API 101](./claude-api-101/README.md)
-- [Claude 101](./claude-101/README.md)
-- [Introduction to LLM Agents](./introduction-to-llm-agents/README.md)
 
 <br /><!-- markdownlint-disable-line MD033 -->
 
