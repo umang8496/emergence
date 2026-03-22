@@ -12,5 +12,6 @@
 
 - [Foundations of Prompt Engineering](./prompt-engineering-and-llm-application-development/notebooks/chapter-01-hands-on.ipynb)
 - [Advanced Prompting Strategies](./prompt-engineering-and-llm-application-development/notebooks/chapter-02-hands-on.ipynb)
+- [Tokenizer](./tokenizer/notebook.ipynb)
 
 <br /><!-- markdownlint-disable-line MD033 -->

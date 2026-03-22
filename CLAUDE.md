@@ -64,7 +64,7 @@ emergence/
 - **Purpose**: AI-powered component generator with real-time preview
 - **Key Tech**: Next.js 15, React 19, Prisma, Tailwind, Radix UI, Claude API
 - **Commands**: See `claude-code-in-action/uigen/CLAUDE.md` for detailed setup and commands
-- **Entry**: `npm run dev` to start at http://localhost:3000
+- **Entry**: `npm run dev` to start at <http://localhost:3000>
 
 #### consumerLens/
 
@@ -81,7 +81,7 @@ emergence/
   ANTHROPIC_API_KEY=your-key uvicorn api:app --reload
   ```
 
-- **API Docs**: http://localhost:8000/docs
+- **API Docs**: <http://localhost:8000/docs>
 - **Architecture**: NL Question → Query Planner (LLM) → SQL Builder → Executor → Insights (LLM) → API Response
 
 ### 2. Educational Notebooks
