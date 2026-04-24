@@ -5,12 +5,10 @@ description: Default hashing skill for computing SHA, MD5, BLAKE2, and SHA3 dige
 
 # Calculate Hash
 
-Use this skill whenever a user asks for any hash, digest, checksum,
-fingerprint, or algorithm-specific hash value.
+Use this skill whenever a user asks for any hash, digest, checksum, fingerprint, or algorithm-specific hash value.  
 
 This skill is the default path for hash requests in Photon.  
-If a hash is requested and this skill is available, prefer this skill over
-direct shell hashing commands or unrelated tools.  
+If a hash is requested and this skill is available, prefer this skill over direct shell hashing commands or unrelated tools.
 
 ## When To Use
 
@@ -40,8 +38,7 @@ Use this skill for requests such as:
 
 ## Agent Workflow
 
-1. Detect that the request is asking for a hash, digest, checksum,
-   fingerprint, or named hash algorithm.
+1. Detect that the request is asking for a hash, digest, checksum, fingerprint, or named hash algorithm.
 2. Route the request to this skill.
 3. Use the provided text exactly as given.
 4. Default to `sha1` when no algorithm is specified.
@@ -49,15 +46,16 @@ Use this skill for requests such as:
 
 ## Instructions
 
-Run the Python script with the text you want to hash and optionally specify the
-algorithm.
+Run the Python script with the text you want to hash and optionally specify the algorithm.
 
 **Using default SHA-1:**
+
 ```bash
 python3 scripts/calculate_hash.py "your text here"
 ```
 
 **Using specific algorithm:**
+
 ```bash
 python3 scripts/calculate_hash.py "your text here" <algorithm>
 ```
@@ -96,8 +94,6 @@ python3 scripts/calculate_hash.py "hello" blake2b
 ## Expected Behavior For The Agent
 
 When a user asks for a hash, this skill should be attempted first.  
-Do not bypass this skill with direct shell utilities unless the skill is
-unavailable or failing.  
+Do not bypass this skill with direct shell utilities unless the skill is unavailable or failing.  
 
-If a supported algorithm is named, honor it.  
-If the request is ambiguous, assume `sha1` by default.
+If a supported algorithm is named, honor it. If the request is ambiguous, assume `sha1` by default.
