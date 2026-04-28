@@ -6,11 +6,14 @@ This repository contains utilities and tools designed to extend LLM capabilities
 ## Table of Contents
 
 - [Calculate Hash](#calculate-hash)
+- [Code Review QA](#code-review-qa)
+- [Frontend Development](#frontend-development)
 - [Tech Jokes](#tech-jokes)
 - [Encode Decode](#encode-decode)
 - [Historical Facts](#historical-facts)
 - [Inspect File](#inspect-file)
 - [Lint Markdown](#lint-markdown)
+- [How To Invoke Skills In Prompts](#how-to-invoke-skills-in-prompts)
 - [Project Structure](#project-structure)
 
 ---
@@ -71,6 +74,70 @@ python3 scripts/calculate_hash.py "hello" md5
 ```
 
 **Details:** See [calculate-hash SKILL.md](./skills/calculate-hash/SKILL.md)
+
+---
+
+### Code Review QA
+
+Provides a structured quality assurance checklist for frontend code reviews,
+with emphasis on TypeScript/Angular safety, accessibility, performance,
+and maintainability.
+
+**Location:** `skills/code-review-qa/`
+
+**Focus Areas:**
+
+- Null/undefined safety and type correctness
+- Error handling and resource cleanup
+- Accessibility in HTML/CSS templates
+- Performance bottlenecks and memory leaks
+- Dead code, duplication, and architecture concerns
+
+**How To Use:**
+
+- Ask for a code review on frontend files
+- Request a QA-style checklist-based review before merge
+
+**Examples:**
+
+```text
+Review this Angular component for null safety and memory leaks.
+Perform a QA code review for this TypeScript, HTML, and SCSS change.
+Check this frontend PR for accessibility and performance issues.
+```
+
+**Details:** See [code-review-qa SKILL.md](./skills/code-review-qa/SKILL.md)
+
+---
+
+### Frontend Development
+
+Guides Angular/CSS implementation work, including design translation,
+responsive behavior, and reusable component patterns.
+
+**Location:** `skills/frontend-development/`
+
+**What It Helps With:**
+
+- Building or modifying Angular UI components
+- Translating design artifacts into implementation
+- Keeping style and structure aligned with project conventions
+- Validating responsiveness and accessibility
+
+**How To Use:**
+
+- Ask for implementation help on UI features
+- Ask for design-to-code support with consistency checks
+
+**Examples:**
+
+```text
+Implement this UI design as an Angular component.
+Refactor this page section into a reusable frontend component.
+Update this feature and ensure responsive behavior on mobile and desktop.
+```
+
+**Details:** See [frontend-development SKILL.md](./skills/frontend-development/SKILL.md)
 
 ---
 
@@ -271,6 +338,56 @@ Normalize this markdown without rewriting the content.
 
 ---
 
+## How To Invoke Skills In Prompts
+
+You can invoke a skill in two reliable ways:
+
+- Mention the skill name directly
+- Describe the exact task that maps to the skill behavior
+
+When possible, include input text, file paths, and expected output format.
+This improves routing and gives more consistent results.
+
+### Prompt Patterns
+
+Use these patterns:
+
+```text
+Use the <skill-name> skill to <task>.
+```
+
+```text
+Use the skill at skills/<skill-name>/SKILL.md and <task>.
+```
+
+### Examples
+
+```text
+Use calculate-hash to compute sha256 for: hello world
+
+Use encode-decode to base64_decode this string: aGVsbG8=
+
+Use inspect-file to analyze: consumerLens/main.py
+
+Use lint-markdown to normalize photons/README.md without changing meaning
+
+Use code-review-qa to review this Angular component for null safety and memory leaks
+
+Use frontend-development to implement this UI as a reusable Angular component
+
+Give me a historical fact from the Industrial Era
+
+Tell me a tech joke
+```
+
+### Referencing Rules
+
+- Prefer the exact folder-style skill name, such as `calculate-hash` or `code-review-qa`
+- If you need strict behavior, reference the skill spec file directly, for example `skills/lint-markdown/SKILL.md`
+- For file-focused tasks, include the target path in the same prompt
+
+---
+
 ## Project Structure
 
 ```text
@@ -281,10 +398,26 @@ photons/
     │   ├── SKILL.md
     │   └── scripts/
     │       └── calculate_hash.py
+    ├── code-review-qa/
+    │   ├── SKILL.md
+    │   └── references/
+    │       ├── a11y-checklist.md
+    │       ├── angular-best-practices.md
+    │       ├── eslint-rules.md
+    │       ├── memory-leaks.md
+    │       ├── performance-guide.md
+    │       └── typescript-pitfalls.md
     ├── encode-decode/
     │   ├── SKILL.md
     │   └── scripts/
     │       └── encode_decode.py
+    ├── frontend-development/
+    │   ├── SKILL.md
+    │   └── references/
+    │       ├── angular-style-guide.md
+    │       ├── component-examples.md
+    │       ├── responsive-checklist.md
+    │       └── scss-patterns.md
     ├── historical-facts/
     │   └── SKILL.md
     ├── inspect-file/
