@@ -779,19 +779,258 @@ While zero-shot and few-shot prompting can handle many tasks, instruction follow
 
 ### Role Prompting
 
+Role prompting is a prompt engineering technique where a Large Language Model (LLM) is instructed to adopt a specific **persona, profession, or character** while performing a task.  
+Instead of only telling the model *what* to do, role prompting also defines *who the model should be* when completing the task.  
+This significantly influences the **tone, style, level of detail, perspective, and domain focus** of the generated response.  
+It works because LLMs are trained on vast amounts of text containing dialogues, expert writings, and character portrayals, enabling them to simulate different viewpoints and communication styles.  
+
+Role prompting can be thought of as assigning an actor a role before delivering lines.  
+For example,  
+Telling the model “You are a seasoned detective” or “You are an enthusiastic science communicator” helps it generate responses aligned with that persona rather than providing a generic answer.  
+This makes the output more tailored to the intended audience or use case.  
+
+#### Why Use Role Prompting?
+
+Role prompting provides several advantages over basic instruction-only prompting:
+
+- **Tone and Style Control** – Enables the model to adopt a specific voice such as formal, humorous, technical, empathetic, or critical.
+- **Domain Expertise Simulation** – Encourages responses from the perspective of an expert in a particular field, improving relevance and detail.
+- **Perspective Taking** – Useful for generating content from different viewpoints, simulating personas, or exploring multiple sides of a topic.
+- **Enhanced Task Adherence** – A well-defined role often implies conventions around format, detail, and terminology, helping the model produce more suitable outputs.  
+
+##### Crafting Effective Role Prompts
+
+A strong role prompt generally contains the following elements:
+
+1. **Explicit Role Definition** – Clearly specify the persona or role the model should assume.
+
+   Examples:
+   - "Act as a senior software engineer…"
+   - "You are a historian specializing in 18th-century France…"
+   - "Assume the role of a technical recruiter…"
+
+2. **Context (Optional but Helpful)** – Provide situational context or specify the target audience.
+
+   Examples:
+   - "…explaining quantum physics to a high school student"
+   - "…writing a marketing email for non-technical executives"
+
+3. **Task Instruction** – Clearly define what the role must accomplish.
+
+Combining these elements improves output precision and relevance.
+
+#### Example of Role Prompting
+
+Consider the task: **Explain API rate limiting**
+
+##### Basic Prompt
+
+```text id="7is6f5"
+Explain API rate limiting.
+```
+
+##### Role Prompt
+
+```text id="plk6cu"
+You are a technical writer creating documentation for developers.
+Explain API rate limiting clearly and concisely, outlining why it is necessary
+and common ways it is implemented.
+```
+
+The second prompt is likely to produce a more structured, technical, and developer-focused explanation because the assigned role provides additional context.  
+
+#### How Role Changes Output
+
+The same core task can produce very different results depending on the assigned role.
+
+##### DevOps Engineer Perspective
+
+A prompt assigning the role of a DevOps Engineer discussing containerization would likely emphasize:
+
+- Deployment speed
+- Environment consistency
+- Infrastructure efficiency
+
+##### Marketing Manager Perspective
+
+A prompt assigning the role of a Marketing Manager discussing containerization would likely emphasize:
+
+- Business agility
+- Cost savings
+- Competitive advantage
+
+This demonstrates how role prompting changes not just the tone, but also the content focus of the response.  
+
+#### Best Practices
+
+To use role prompting effectively:
+
+- **Be Specific** – Detailed roles produce better results than vague ones.
+- **Combine with Other Prompting Techniques** – Role prompting works well with instruction following, few-shot prompting, and output formatting constraints.
+- **Avoid Harmful Stereotypes** – Define roles based on expertise or function, not demographic assumptions.
+- **Test and Refine** – Experiment with phrasing and specificity to optimize results.
+- **Reinforce Role if Needed** – In long conversations, restate the role periodically to maintain consistency.  
+
+#### Summary
+
+Role prompting is a powerful technique for controlling how an LLM responds by assigning it a specific identity or perspective.  
+By defining *who the model should be*, developers can influence the tone, expertise, style, and focus of the generated output.  
+This makes role prompting highly valuable for creating targeted, context-aware, and audience-appropriate responses in real-world applications.  
+
 ---
 
 ### Structuring Output Formats
 
+While Large Language Models (LLMs) are highly effective at generating natural language, many real-world applications require outputs in a **structured, machine-readable format** such as JSON or Markdown.  
+Free-form text can be difficult and error-prone to parse programmatically, whereas structured outputs enable seamless integration with software systems, databases, and APIs.  
+
+#### Why Structured Output Matters
+
+In practical applications—such as extracting contact details from an email—unstructured responses like:
+
+> “The contact is John Doe, email is [john@example.com](mailto:john@example.com)…”
+
+require additional parsing logic, which can break if the format changes slightly. In contrast, structured output like:
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "123-456-7890"
+}
+```
+
+can be directly consumed by programs, making processing simpler and more reliable.
+
+##### Key Benefits
+
+- **Easier Integration** – Structured data fits naturally into APIs, databases, and pipelines.
+- **Improved Reliability** – Parsing structured formats is less error-prone than handling free text.
+- **Programmatic Usability** – Enables automation, data extraction, and downstream processing.
+
+#### Techniques for Generating Structured Output
+
+Achieving structured responses depends on how well the prompt is designed. Common techniques include:
+
+##### 1. Explicit Instructions
+
+Clearly specify the desired output format.
+
+Example:
+
+```text
+Return the output as a JSON object.
+```
+
+##### 2. Schema Definition (for JSON)
+
+Define expected keys, data types, and structure.
+
+Example:
+
+```text
+Return JSON with keys: name (string), email (string), phone (string or null).
+```
+
+##### 3. Few-Shot Examples
+
+Provide sample outputs to demonstrate the desired structure.
+
+##### 4. Use of Delimiters
+
+Wrap output in markers (e.g., triple backticks) to separate it from extra text.
+
+Example:
+
+````text
+Return the result inside ```json ... ```
+````
+
+These techniques guide the model toward producing consistent and usable structured data.
+
+#### Example: JSON Output
+
+##### Prompt
+
+```text
+Extract the name, email, and company from the text.
+Return JSON with keys: contact_name, contact_email, company.
+If missing, return null.
+
+Text:
+"Reach out to Jane Smith from TechCorp Inc. at jane.s@techcorp.com"
+```
+
+##### Expected Output
+
+```json
+{
+  "contact_name": "Jane Smith",
+  "contact_email": "jane.s@techcorp.com",
+  "company": "TechCorp Inc."
+}
+```
+
+If information is missing, the model should return:
+
+```json
+{
+  "contact_name": "Jane Smith",
+  "contact_email": "jane.s@techcorp.com",
+  "company": null
+}
+```
+
+#### Example: Markdown Output
+
+Structured output is not limited to JSON. Markdown is useful for formatted display.
+
+##### Prompt
+
+```text
+Summarize the benefits of LLMs for customer support.
+
+Format:
+- H2 heading
+- Bullet points
+- Bold key concepts
+```
+
+##### Expected Output
+
+```markdown
+## LLM Benefits in Customer Support
+
+- **Faster response times**: Immediate responses reduce wait time.
+- **24/7 availability**: Continuous support without downtime.
+- **Scalability**: Handles large volumes of queries efficiently.
+```
+
+Markdown outputs are ideal for UI rendering or documentation systems.
+
+#### Challenges and Best Practices
+
+While structured prompting is powerful, it comes with some challenges:
+
+- **Model Limitations** – Some models may produce malformed JSON (missing commas, incorrect quotes).
+- **Validation Required** – Always validate outputs before using them in production.
+- **Complexity Trade-off** – Simpler schemas are more reliable than highly complex ones.
+- **Instruction Clarity** – Clear and specific prompts significantly improve results.
+- **Iterative Refinement** – Adjust prompts if outputs are inconsistent.
+
+#### Summary
+
+Structured output prompting is a critical technique for building reliable LLM-powered applications.  
+By explicitly defining formats such as JSON or Markdown, and guiding the model with clear instructions and examples, developers can transform unstructured text generation into predictable, machine-usable data.  
+This significantly enhances integration, reduces errors, and enables automation across systems.  
+
 ---
 
-### Chain-of-Thought Prompting
+#### Chain-of-Thought Prompting
 
 ---
 
-### Self-Consistency Prompting
-
----
+#### Self-Consistency Prompting
 
 #### [Chapter 02: Hands On Exercise](./notebooks/chapter-02-hands-on.ipynb)
 
