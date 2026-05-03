@@ -67,13 +67,12 @@ It fails on both training and validation data.
 
 ### The balance
 
-```text
-                    Underfitting ←————→ Overfitting
-Model complexity:      Low                  High
-Training error:        High                 Low
-Validation error:      High                 High (but for a different reason)
-Sweet spot:            Training ≈ Validation, both reasonably low
-```
+| Property         | Underfitting                          | Sweet Spot                                 | Overfitting                        |
+|------------------|---------------------------------------|--------------------------------------------|------------------------------------|
+| Model complexity | Low                                   | Balanced                                   | High                               |
+| Training error   | High                                  | Low                                        | Low                                |
+| Validation error | High                                  | Low                                        | High (but for a different reason)  |
+| Goal             | —                                     | Training ≈ Validation, both reasonably low |                                    |
 
 ---
 
