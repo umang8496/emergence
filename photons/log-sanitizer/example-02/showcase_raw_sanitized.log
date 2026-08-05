@@ -1,0 +1,20 @@
+[2026-08-05 09:14:02] INFO  [gateway.py:33] Incoming request accepted from client node.
+[2026-08-05 09:14:03] WARN  [db_connector.py:21] Falling back to secondary replica connection string: [REDACTED_DB_CREDENTIALS]
+[2026-08-05 09:14:04] INFO  [user_profile.py:77] Profile lookup succeeded. Contact email on file: [REDACTED_EMAIL], phone on file: ([REDACTED_PHONE]
+[2026-08-05 09:14:05] INFO  [network_audit.py:150] Request originated from external IP [REDACTED_IP]
+[2026-08-05 09:14:06] DEBUG [kyc_service.go:41] Identity verification payload received:
+  {
+    "full_name": "Jordan A. Blake",
+    "ssn": "[REDACTED_SSN]",
+    "card_number": "[REDACTED_CREDIT_CARD]",
+    "phone": "+[REDACTED_PHONE]"
+  }
+[2026-08-05 09:14:07] ERROR [api_gateway.js:88] Upstream call rejected. Outbound request headers:
+  Headers: {
+    "Authorization": "Bearer [REDACTED_KEY]",
+    "X-Client-Key": "[REDACTED_KEY]"
+  }
+[2026-08-05 09:14:08] DEBUG [config_loader.py:19] Loaded secrets from environment: api_key=[REDACTED_KEY], password: [REDACTED_KEY]!23
+[2026-08-05 09:14:09] FATAL [tls_handshake.c:74] Unable to load deployment certificate key:
+[REDACTED_PRIVATE_KEY_BLOCK]
+[2026-08-05 09:14:10] INFO  [gateway.py:120] Request lifecycle completed with status 500.

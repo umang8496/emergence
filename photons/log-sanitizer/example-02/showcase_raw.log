@@ -1,0 +1,23 @@
+[2026-08-05 09:14:02] INFO  [gateway.py:33] Incoming request accepted from client node.
+[2026-08-05 09:14:03] WARN  [db_connector.py:21] Falling back to secondary replica connection string: mysql://svc_reader:R3plica#Secret@db-replica-02.internal.net:3306/billing
+[2026-08-05 09:14:04] INFO  [user_profile.py:77] Profile lookup succeeded. Contact email on file: jane.doe@northwind-traders.com, phone on file: (415) 555-0192
+[2026-08-05 09:14:05] INFO  [network_audit.py:150] Request originated from external IP 203.0.113.77
+[2026-08-05 09:14:06] DEBUG [kyc_service.go:41] Identity verification payload received:
+  {
+    "full_name": "Jordan A. Blake",
+    "ssn": "123-45-6789",
+    "card_number": "5500 0000 0000 0004",
+    "phone": "+1-415-555-0192"
+  }
+[2026-08-05 09:14:07] ERROR [api_gateway.js:88] Upstream call rejected. Outbound request headers:
+  Headers: {
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqYW5lLmRvZSJ9.qT1z9Kx0lY8bJd3c7Vh2Wr5s6Nm4Xo1PjkQvUt0AeIc",
+    "X-Client-Key": "AKIAABCD1234EFGH5678"
+  }
+[2026-08-05 09:14:08] DEBUG [config_loader.py:19] Loaded secrets from environment: api_key=sk_test_9f8e7d6c5b4a3210abcd, password: SuperSecretPass!23
+[2026-08-05 09:14:09] FATAL [tls_handshake.c:74] Unable to load deployment certificate key:
+-----BEGIN RSA PRIVATE KEY-----
+MIIBOgIBAAJBAK8wzC7z8f4h1k2j3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d
+1e2f3g4h5i6j7k8l9m0n1o2p3q4r5s6t7u8v9w0x1y2z3a4b5c6d7e8f9g0h1i2j
+-----END RSA PRIVATE KEY-----
+[2026-08-05 09:14:10] INFO  [gateway.py:120] Request lifecycle completed with status 500.
